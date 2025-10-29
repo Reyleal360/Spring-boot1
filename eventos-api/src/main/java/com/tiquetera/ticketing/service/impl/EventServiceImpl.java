@@ -1,27 +1,21 @@
 package com.tiquetera.ticketing.service.impl;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.tiquetera.ticketing.dto.EventDTO;
 import com.tiquetera.ticketing.dto.VenueDTO;
 import com.tiquetera.ticketing.exception.ResourceNotFoundException;
 import com.tiquetera.ticketing.repository.EventRepository;
 import com.tiquetera.ticketing.repository.VenueRepository;
+import com.tiquetera.ticketing.service.EventService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-
-import com.tiquetera.ticketing.service.EventService;
-
 /**
  * Implementación del servicio de Eventos.
- * 
- * Principios SOLID aplicados:
- * - Single Responsibility Principle (SRP): Solo maneja lógica de negocio de eventos
- * - Dependency Inversion Principle (DIP): Depende de abstracciones (interfaces)
- * - Liskov Substitution Principle (LSP): Puede ser sustituida por cualquier implementación de EventService
  * 
  * @author Ticketing Team
  * @version 1.0
@@ -29,9 +23,8 @@ import com.tiquetera.ticketing.service.EventService;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class EventServiceImpl implements EventService  {
+public class EventServiceImpl implements EventService {
     
-    // Inyección de dependencias por constructor (DIP)
     private final EventRepository eventRepository;
     private final VenueRepository venueRepository;
     

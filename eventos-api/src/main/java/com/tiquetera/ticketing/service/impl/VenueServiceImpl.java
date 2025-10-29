@@ -1,25 +1,19 @@
 package com.tiquetera.ticketing.service.impl;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.tiquetera.ticketing.dto.VenueDTO;
 import com.tiquetera.ticketing.exception.ResourceNotFoundException;
 import com.tiquetera.ticketing.repository.VenueRepository;
+import com.tiquetera.ticketing.service.VenueService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-
-import com.tiquetera.ticketing.service.VenueService;
-
 /**
  * Implementación del servicio de Venues.
- * 
- * Principios SOLID aplicados:
- * - Single Responsibility Principle (SRP): Solo maneja lógica de negocio de venues
- * - Dependency Inversion Principle (DIP): Depende de abstracciones (interfaces)
- * - Liskov Substitution Principle (LSP): Puede ser sustituida por cualquier implementación de VenueService
  * 
  * @author Ticketing Team
  * @version 1.0
@@ -29,7 +23,6 @@ import com.tiquetera.ticketing.service.VenueService;
 @RequiredArgsConstructor
 public class VenueServiceImpl implements VenueService {
     
-    // Inyección de dependencias por constructor (DIP)
     private final VenueRepository venueRepository;
     
     @Override
