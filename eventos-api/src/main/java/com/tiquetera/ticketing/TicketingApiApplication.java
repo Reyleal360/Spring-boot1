@@ -11,10 +11,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 public class TicketingApiApplication {
-    
+
     public static void main(String[] args) {
         SpringApplication.run(TicketingApiApplication.class, args);
-        
+
         System.out.println("\n" +
                 "╔═══════════════════════════════════════════════════════════╗\n" +
                 "║                                                           ║\n" +
@@ -23,7 +23,7 @@ public class TicketingApiApplication {
                 "║  📚 Swagger UI:      http://localhost:8080/swagger-ui.html  ║\n" +
                 "║  📄 OpenAPI Docs:    http://localhost:8080/api-docs      ║\n" +
                 "║                                                           ║\n" +
-                "║  🏗️  Arquitectura:   MVC por Capas                       ║\n" +
+                "║  🏗️  Arquitectura:   Hexagonal (Ports & Adapters)        ║\n" +
                 "║  💾 Almacenamiento:  In-Memory (temporal)                ║\n" +
                 "║                                                           ║\n" +
                 "╚═══════════════════════════════════════════════════════════╝\n");
