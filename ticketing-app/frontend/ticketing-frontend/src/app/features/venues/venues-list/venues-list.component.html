@@ -1,0 +1,49 @@
+<div class="venues-container">
+  <div class="header">
+    <h1>🏟️ Venues (Lugares de Eventos)</h1>
+    <a routerLink="/venues/new" class="btn btn-primary">+ Nuevo Venue</a>
+  </div>
+
+  <div *ngIf="loading" class="loading">Cargando venues...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <div class="table-container" *ngIf="!loading && !error">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Ciudad</th>
+          <th>País</th>
+          <th>Capacidad</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let venue of venues">
+          <td>{{ venue.id }}</td>
+          <td>{{ venue.name }}</td>
+          <td>{{ venue.city }}</td>
+          <td>{{ venue.country }}</td>
+          <td>{{ venue.capacity | number }}</td>
+          <td>
+            <span [class]="'badge badge-' + (venue.status || 'ACTIVE').toLowerCase()">
+              {{ venue.status || 'ACTIVE' }}
+            </span>
+          </td>
+          <td class="actions">
+            <a [routerLink]="['/venues', venue.id]" class="btn btn-sm btn-info">Ver</a>
+            <a [routerLink]="['/venues', venue.id, 'edit']" class="btn btn-sm btn-warning">Editar</a>
+            <button (click)="deleteVenue(venue.id)" class="btn btn-sm btn-danger">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="venues.length === 0" class="empty-state">
+      <p>No hay venues registrados</p>
+      <a routerLink="/venues/new" class="btn btn-primary">Crear el primer venue</a>
+    </div>
+  </div>
+</div>

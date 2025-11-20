@@ -1,0 +1,53 @@
+<div class="form-container">
+    <h1>{{ isEditMode ? 'Editar Evento' : 'Nuevo Evento' }}</h1>
+    <div *ngIf="error" class="error">{{ error }}</div>
+
+    <form (ngSubmit)="onSubmit()" #eventForm="ngForm">
+        <div class="form-group">
+            <label>Nombre *</label>
+            <input type="text" [(ngModel)]="event.name" name="name" required class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label>Descripción *</label>
+            <textarea [(ngModel)]="event.description" name="description" required rows="3"
+                class="form-control"></textarea>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Fecha del Evento *</label>
+                <input type="datetime-local" [(ngModel)]="event.eventDate" name="eventDate" required
+                    class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label>Venue *</label>
+                <select [(ngModel)]="event.venueId" name="venueId" required class="form-control">
+                    <option value="">Seleccionar venue...</option>
+                    <option *ngFor="let venue of venues" [value]="venue.id">{{ venue.name }} - {{ venue.city }}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Capacidad *</label>
+                <input type="number" [(ngModel)]="event.capacity" name="capacity" required min="1" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label>Precio del Boleto *</label>
+                <input type="number" [(ngModel)]="event.ticketPrice" name="ticketPrice" required min="0"
+                    class="form-control">
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="button" routerLink="/events" class="btn btn-secondary">Cancelar</button>
+            <button type="submit" [disabled]="!eventForm.form.valid || loading" class="btn btn-primary">
+                {{ loading ? 'Guardando...' : (isEditMode ? 'Actualizar' : 'Crear') }}
+            </button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,34 @@
+<div class="home-container">
+    <div class="hero">
+        <h1>🎫 Bienvenido a Ticketing App</h1>
+        <p>Sistema de gestión de eventos y venues</p>
+    </div>
+
+    <div class="stats" *ngIf="!loading">
+        <div class="stat-card">
+            <div class="stat-value">{{ totalEvents }}</div>
+            <div class="stat-label">Eventos Registrados</div>
+            <a routerLink="/events" class="stat-link">Ver todos →</a>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-value">{{ totalVenues }}</div>
+            <div class="stat-label">Venues Disponibles</div>
+            <a routerLink="/venues" class="stat-link">Ver todos →</a>
+        </div>
+    </div>
+
+    <div class="actions">
+        <a routerLink="/events/new" class="action-card">
+            <div class="action-icon">📅</div>
+            <h3>Crear Evento</h3>
+            <p>Registra un nuevo evento</p>
+        </a>
+
+        <a routerLink="/venues/new" class="action-card">
+            <div class="action-icon">🏟️</div>
+            <h3>Agregar Venue</h3>
+            <p>Registra un nuevo lugar</p>
+        </a>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+<div class="events-container">
+    <div class="header">
+        <h1>🎫 Eventos</h1>
+        <a routerLink="/events/new" class="btn btn-primary">+ Nuevo Evento</a>
+    </div>
+
+    <div *ngIf="loading" class="loading">Cargando eventos...</div>
+    <div *ngIf="error" class="error">{{ error }}</div>
+
+    <div class="table-container" *ngIf="!loading && !error">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Fecha</th>
+                    <th>Venue</th>
+                    <th>Capacidad</th>
+                    <th>Precio</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let event of events">
+                    <td>{{ event.id }}</td>
+                    <td>{{ event.name }}</td>
+                    <td>{{ event.eventDate | date:'short' }}</td>
+                    <td>{{ event.venueName }}</td>
+                    <td>{{ event.capacity | number }}</td>
+                    <td>{{ event.ticketPrice | currency:'COP':'symbol':'1.0-0' }}</td>
+                    <td>
+                        <span [class]="'badge badge-' + (event.status || 'ACTIVE').toLowerCase()">
+                            {{ event.status || 'ACTIVE' }}
+                        </span>
+                    </td>
+                    <td class="actions">
+                        <a [routerLink]="['/events', event.id, 'edit']" class="btn btn-sm btn-warning">Editar</a>
+                        <button (click)="deleteEvent(event.id)" class="btn btn-sm btn-danger">Eliminar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div *ngIf="events.length === 0" class="empty-state">
+            <p>No hay eventos registrados</p>
+            <a routerLink="/events/new" class="btn btn-primary">Crear el primer evento</a>
+        </div>
+    </div>
+</div>
