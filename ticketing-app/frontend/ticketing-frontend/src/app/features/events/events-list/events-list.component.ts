@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { Event } from '../../core/models/event.model';
-import { EventService } from '../../core/services/event.service';
+import { Event } from '../../../core/models/event.model';
+import { EventService } from '../../../core/services/event.service';
 
 @Component({
     selector: 'app-events-list',
@@ -27,11 +27,11 @@ export class EventsListComponent implements OnInit {
         this.loading = true;
         this.error = null;
         this.eventService.getAll().subscribe({
-            next: (data) => {
+            next: (data: Event[]) => {
                 this.events = data;
                 this.loading = false;
             },
-            error: (err) => {
+            error: (err: any) => {
                 this.error = 'Error al cargar eventos: ' + err.message;
                 this.loading = false;
             }
@@ -44,7 +44,7 @@ export class EventsListComponent implements OnInit {
         if (confirm('¿Estás seguro de eliminar este evento?')) {
             this.eventService.delete(id).subscribe({
                 next: () => this.loadEvents(),
-                error: (err) => this.error = 'Error al eliminar: ' + err.message
+                error: (err: any) => this.error = 'Error al eliminar: ' + err.message
             });
         }
     }

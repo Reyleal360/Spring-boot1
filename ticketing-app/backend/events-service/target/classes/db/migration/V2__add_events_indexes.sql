@@ -1,0 +1,5 @@
+CREATE INDEX idx_events_venue_id ON events(venue_id);
+CREATE INDEX idx_events_event_date ON events(event_date);
+CREATE INDEX idx_events_status ON events(status);
+CREATE INDEX idx_events_ticket_price ON events(ticket_price);
+CREATE INDEX idx_events_venue_date ON events(venue_id, event_date);

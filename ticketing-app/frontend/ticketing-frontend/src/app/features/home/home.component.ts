@@ -27,14 +27,14 @@ export class HomeComponent implements OnInit {
 
     loadStats(): void {
         this.eventService.getAll().subscribe({
-            next: (events) => {
+            next: (events: any) => {
                 this.totalEvents = events.length;
                 this.loading = false;
             }
         });
 
         this.venueService.getAll().subscribe({
-            next: (venues) => this.totalVenues = venues.length
+            next: (venues: any) => this.totalVenues = venues.length
         });
     }
 }

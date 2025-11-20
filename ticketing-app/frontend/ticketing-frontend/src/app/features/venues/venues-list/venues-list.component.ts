@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { Venue } from '../../core/models/venue.model';
-import { VenueService } from '../../core/services/venue.service';
+import { Venue } from '../../../core/models/venue.model';
+import { VenueService } from '../../../core/services/venue.service';
 
 @Component({
     selector: 'app-venues-list',
@@ -26,11 +26,11 @@ export class VenuesListComponent implements OnInit {
         this.loading = true;
         this.error = null;
         this.venueService.getAll().subscribe({
-            next: (data) => {
+            next: (data: Venue[]) => {
                 this.venues = data;
                 this.loading = false;
             },
-            error: (err) => {
+            error: (err: any) => {
                 this.error = 'Error al cargar venues: ' + err.message;
                 this.loading = false;
             }
@@ -45,7 +45,7 @@ export class VenuesListComponent implements OnInit {
                 next: () => {
                     this.loadVenues();
                 },
-                error: (err) => {
+                error: (err: any) => {
                     this.error = 'Error al eliminar venue: ' + err.message;
                 }
             });

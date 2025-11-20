@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Venue } from '../../core/models/venue.model';
-import { VenueService } from '../../core/services/venue.service';
+import { Venue } from '../../../core/models/venue.model';
+import { VenueService } from '../../../core/services/venue.service';
 
 @Component({
     selector: 'app-venue-form',
@@ -44,8 +44,8 @@ export class VenueFormComponent implements OnInit {
 
     loadVenue(id: number): void {
         this.venueService.getById(id).subscribe({
-            next: (data) => this.venue = data,
-            error: (err) => this.error = 'Error al cargar venue: ' + err.message
+            next: (data: Venue) => this.venue = data,
+            error: (err: any) => this.error = 'Error al cargar venue: ' + err.message
         });
     }
 
@@ -61,7 +61,7 @@ export class VenueFormComponent implements OnInit {
             next: () => {
                 this.router.navigate(['/venues']);
             },
-            error: (err) => {
+            error: (err: any) => {
                 this.error = 'Error al guardar: ' + err.message;
                 this.loading = false;
             }
