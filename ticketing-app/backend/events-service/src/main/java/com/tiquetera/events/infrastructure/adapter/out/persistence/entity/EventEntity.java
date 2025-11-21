@@ -42,12 +42,17 @@ public class EventEntity {
     @Column(name = "event_date", nullable = false)
     private LocalDateTime eventDate;
 
-    @Column(name = "venue_id", nullable = false)
-    private Long venueId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "venue_id", nullable = false)
+    private VenueEntity venue;
 
-    // Campo desnormalizado para evitar consultas constantes al otro microservicio
-    @Column(name = "venue_name", length = 200)
-    private String venueName;
+    // Mantenemos venueName como campo de solo lectura si se desea desnormalizar,
+    // o lo eliminamos si confiamos en venue.getName().
+    // Por ahora lo mantendremos sincronizable o lo eliminamos.
+    // La HU pide optimizar, así que eliminaremos la redundancia y usaremos la
+    // relación.
+    // @Column(name = "venue_name", length = 200)
+    // private String venueName;
 
     @Column(name = "capacity")
     private Integer capacity;

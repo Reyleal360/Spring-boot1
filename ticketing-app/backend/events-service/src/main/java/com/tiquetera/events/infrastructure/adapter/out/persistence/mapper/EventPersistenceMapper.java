@@ -21,20 +21,40 @@ public interface EventPersistenceMapper {
     /**
      * Convierte de entidad de persistencia a entidad de dominio.
      */
+    @org.mapstruct.Mapping(source = "venue.id", target = "venueId")
+    @org.mapstruct.Mapping(source = "venue.name", target = "venueName")
     Event toDomain(EventEntity entity);
 
-    /**
-     * Convierte de entidad de dominio a entidad de persistencia.
-     */
-    EventEntity toEntity(Event domain);
+    // Eliminamos el método abstracto para evitar ambigüedad y usamos el default
+    // como la implementación principal
+    // EventEntity toEntity(Event domain);
 
-    /**
-     * Convierte una lista de entidades de persistencia a entidades de dominio.
-     */
     List<Event> toDomainList(List<EventEntity> entities);
 
-    /**
-     * Convierte una lista de entidades de dominio a entidades de persistencia.
-     */
     List<EventEntity> toEntityList(List<Event> domains);
+
+    // Este método será usado por MapStruct para la conversión
+    default EventEntity toEntity(Event domain) {
+        if (domain == null) {
+            return null;
+        }
+        EventEntity.EventEntityBuilder builder = EventEntity.builder();
+        builder.id(domain.getId());
+        builder.name(domain.getName());
+        builder.description(domain.getDescription());
+        builder.eventDate(domain.getEventDate());
+        builder.capacity(domain.getCapacity());
+        builder.ticketPrice(domain.getTicketPrice());
+        builder.status(domain.getStatus());
+        builder.createdAt(domain.getCreatedAt());
+        builder.updatedAt(domain.getUpdatedAt());
+
+        if (domain.getVenueId() != null) {
+            VenueEntity venue = new VenueEntity();
+            venue.setId(domain.getVenueId());
+            builder.venue(venue);
+        }
+
+        return builder.build();
+    }
 }

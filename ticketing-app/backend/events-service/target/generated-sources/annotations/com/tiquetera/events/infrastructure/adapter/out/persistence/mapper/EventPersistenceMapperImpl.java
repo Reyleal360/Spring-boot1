@@ -2,6 +2,7 @@ package com.tiquetera.events.infrastructure.adapter.out.persistence.mapper;
 
 import com.tiquetera.events.domain.model.Event;
 import com.tiquetera.events.infrastructure.adapter.out.persistence.entity.EventEntity;
+import com.tiquetera.events.infrastructure.adapter.out.persistence.entity.VenueEntity;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
@@ -9,8 +10,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-11-20T19:17:18-0500",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.16 (Ubuntu)"
+    date = "2025-11-20T19:21:55-0500",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.44.0.v20251118-1623, environment: Java 21.0.9 (Eclipse Adoptium)"
 )
 @Component
 public class EventPersistenceMapperImpl implements EventPersistenceMapper {
@@ -23,12 +24,12 @@ public class EventPersistenceMapperImpl implements EventPersistenceMapper {
 
         Event event = new Event();
 
+        event.setVenueId( entityVenueId( entity ) );
+        event.setVenueName( entityVenueName( entity ) );
         event.setId( entity.getId() );
         event.setName( entity.getName() );
         event.setDescription( entity.getDescription() );
         event.setEventDate( entity.getEventDate() );
-        event.setVenueId( entity.getVenueId() );
-        event.setVenueName( entity.getVenueName() );
         event.setCapacity( entity.getCapacity() );
         event.setTicketPrice( entity.getTicketPrice() );
         event.setStatus( entity.getStatus() );
@@ -36,29 +37,6 @@ public class EventPersistenceMapperImpl implements EventPersistenceMapper {
         event.setUpdatedAt( entity.getUpdatedAt() );
 
         return event;
-    }
-
-    @Override
-    public EventEntity toEntity(Event domain) {
-        if ( domain == null ) {
-            return null;
-        }
-
-        EventEntity.EventEntityBuilder eventEntity = EventEntity.builder();
-
-        eventEntity.id( domain.getId() );
-        eventEntity.name( domain.getName() );
-        eventEntity.description( domain.getDescription() );
-        eventEntity.eventDate( domain.getEventDate() );
-        eventEntity.venueId( domain.getVenueId() );
-        eventEntity.venueName( domain.getVenueName() );
-        eventEntity.capacity( domain.getCapacity() );
-        eventEntity.ticketPrice( domain.getTicketPrice() );
-        eventEntity.status( domain.getStatus() );
-        eventEntity.createdAt( domain.getCreatedAt() );
-        eventEntity.updatedAt( domain.getUpdatedAt() );
-
-        return eventEntity.build();
     }
 
     @Override
@@ -87,5 +65,35 @@ public class EventPersistenceMapperImpl implements EventPersistenceMapper {
         }
 
         return list;
+    }
+
+    private Long entityVenueId(EventEntity eventEntity) {
+        if ( eventEntity == null ) {
+            return null;
+        }
+        VenueEntity venue = eventEntity.getVenue();
+        if ( venue == null ) {
+            return null;
+        }
+        Long id = venue.getId();
+        if ( id == null ) {
+            return null;
+        }
+        return id;
+    }
+
+    private String entityVenueName(EventEntity eventEntity) {
+        if ( eventEntity == null ) {
+            return null;
+        }
+        VenueEntity venue = eventEntity.getVenue();
+        if ( venue == null ) {
+            return null;
+        }
+        String name = venue.getName();
+        if ( name == null ) {
+            return null;
+        }
+        return name;
     }
 }
