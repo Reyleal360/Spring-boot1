@@ -1,36 +1,65 @@
-# Historia de Usuario: Catálogo Persistente con Validación y Paginación (Spring Data JPA)
+# HU2: Catálogo Persistente con Validación y Paginación
 
-## Objetivo de la HU
-Integrar persistencia real mediante Spring Data JPA + H2, agregando validaciones y paginación para mejorar la calidad del servicio REST.
+Esta rama implementa la persistencia de datos para los eventos y la validación de los datos de entrada, asegurando que la información almacenada sea consistente y fiable.
 
-## Tareas
+## Tecnologías Clave
 
-### TASK 1: Persistencia con JPA
-1. Crear entidades `EventEntity` y `VenueEntity`.
-2. Crear interfaces `EventRepository` y `VenueRepository` (extienden `JpaRepository`).
-3. Migrar los servicios para operar sobre base de datos.
-4. Validar relaciones y constraints básicos (nombre único de evento).
+*   **Spring Data JPA**: Para la interacción con la base de datos.
+*   **H2 Database**: Base de datos en memoria utilizada para desarrollo rápido.
+*   **Jakarta Validation**: Para validar los campos de las peticiones REST.
 
-### TASK 2: Validaciones
-- Aplicar `@Valid`, `@NotBlank`, `@Size`, `@Future`, etc.
-- Implementar mensajes de error descriptivos en el payload.
-- Validar duplicados en nombres de eventos.
+## Implementación Detallada
 
-### TASK 3: Paginación y Filtros
-- `GET /events?page=&size=&sort=` con `Pageable`.
-- Filtros opcionales por ciudad, categoría, fechaInicio.
+### 1. Persistencia (JPA)
+Se ha creado la entidad `Event` y su repositorio correspondiente.
 
-### TASK 4: Manejo básico de errores
-- Implementar `@ControllerAdvice` para capturar excepciones.
-- Retornar errores 400, 404 y 409 con mensajes claros.
+**Entidad `Event` (`domain/model/Event.java`)**:
+Representa la tabla `events` en la base de datos.
+```java
+@Entity
+@Table(name = "events")
+@Data
+public class Event {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    private String description;
+    private LocalDateTime eventDate;
+    // ... otros campos
+}
+```
 
-## Criterios de Aceptación
-- CRUD persistente con H2.
-- Validaciones activas y mensajes legibles.
-- Paginación funcional y documentada.
-- Errores coherentes y manejados globalmente.
+**Repositorio `EventRepository` (`infrastructure/adapter/out/jpa/EventRepository.java`)**:
+Interfaz que extiende `JpaRepository` para obtener operaciones CRUD automáticas.
+```java
+public interface EventRepository extends JpaRepository<Event, Long> {
+    // Métodos de consulta personalizados pueden ir aquí
+}
+```
 
-## Story Points: 10
+### 2. Validación
+Se utilizan anotaciones estándar para validar los DTOs de entrada (`EventRequest`).
 
-## Cierre de la actividad
-La API debe listar y filtrar eventos desde base de datos, con control de errores y paginación adecuada para simular consultas en producción.
+*   `@NotNull`: El campo no puede ser nulo.
+*   `@NotBlank`: El campo no puede estar vacío.
+*   `@Size(min, max)`: Restringe la longitud de cadenas.
+*   `@Future`: Asegura que la fecha del evento sea futura.
+
+**Ejemplo de uso en Controlador**:
+```java
+@PostMapping
+public ResponseEntity<EventResponse> createEvent(@RequestBody @Validated EventRequest request) {
+    // ... lógica de creación
+}
+```
+
+### 3. Paginación
+Aunque la implementación completa de paginación robusta está en progreso, el repositorio soporta `Pageable` para consultas paginadas futuras.
+
+## Ejecución
+1.  Ejecutar `./mvnw spring-boot:run`.
+2.  Acceder a la consola H2 en `http://localhost:8080/h2-console`.
+    *   JDBC URL: `jdbc:h2:mem:testdb`
+    *   User: `sa`
+    *   Password: (vacío)
