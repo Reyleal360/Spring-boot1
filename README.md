@@ -1,8 +1,8 @@
-# HU4: Administración de Eventos y Venues (Relaciones)
+# HU4: Event & Venue Administration (Relationships)
 
-Esta rama expande el modelo de dominio para incluir la entidad `Venue` (Lugar) y establece relaciones entre eventos y lugares, además de introducir la gestión de migraciones de base de datos con Flyway.
+This branch expands the domain model to include the `Venue` entity and establishes relationships between events and venues. It also introduces database migration management with Flyway.
 
-## Diagrama Entidad-Relación (ERD)
+## Entity-Relationship Diagram (ERD)
 
 ```mermaid
 erDiagram
@@ -21,10 +21,10 @@ erDiagram
     }
 ```
 
-## Implementación Detallada
+## Detailed Implementation
 
-### 1. Entidad Venue y Relaciones
-Se ha creado la entidad `Venue` y se ha relacionado con `Event`.
+### 1. Venue Entity and Relationships
+The `Venue` entity has been created and related to `Event`.
 
 **Venue (`domain/model/Venue.java`)**:
 ```java
@@ -45,20 +45,20 @@ public class Venue {
 ```
 
 **Event (`domain/model/Event.java`)**:
-Se añadió la relación `@ManyToOne`.
+Added the `@ManyToOne` relationship.
 ```java
 @ManyToOne(fetch = FetchType.LAZY)
 @JoinColumn(name = "venue_id")
 private Venue venue;
 ```
 
-### 2. Migraciones con Flyway
-Se utiliza Flyway para gestionar el esquema de la base de datos de forma evolutiva.
+### 2. Migrations with Flyway
+Flyway is used to manage the database schema evolution.
 
-*   `src/main/resources/db/migration/V1__init.sql`: Creación inicial de tablas.
-*   `src/main/resources/db/migration/V2__add_venues.sql`: Creación de la tabla `venues` y alteración de `events` para añadir la clave foránea.
+*   `src/main/resources/db/migration/V1__init.sql`: Initial table creation.
+*   `src/main/resources/db/migration/V2__add_venues.sql`: Creation of the `venues` table and altering `events` to add the foreign key.
 
-**Ejemplo de Script V2**:
+**Example Script V2**:
 ```sql
 CREATE TABLE venues (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -71,5 +71,5 @@ ALTER TABLE events ADD COLUMN venue_id BIGINT;
 ALTER TABLE events ADD CONSTRAINT fk_event_venue FOREIGN KEY (venue_id) REFERENCES venues(id);
 ```
 
-### 3. Optimización de Consultas
-Se utiliza `FetchType.LAZY` en la relación `@ManyToOne` para evitar cargar el `Venue` innecesariamente cuando se consultan eventos, mejorando el rendimiento.
+### 3. Query Optimization
+`FetchType.LAZY` is used in the `@ManyToOne` relationship to avoid loading the `Venue` unnecessarily when querying events, improving performance.
