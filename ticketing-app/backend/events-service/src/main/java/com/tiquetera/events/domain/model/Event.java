@@ -12,7 +12,7 @@ import java.util.Objects;
  * Representa el concepto de negocio de un evento en el dominio.
  * 
  * @author Ticketing Team
- * @version 2.0 - Hexagonal Architecture
+ * @version 3.0 - HU5 Error Handling
  */
 public class Event {
 
@@ -20,6 +20,7 @@ public class Event {
     private String name;
     private String description;
     private LocalDateTime eventDate;
+    private LocalDateTime endDate;
     private Long venueId;
     private String venueName;
     private Integer capacity;
@@ -33,13 +34,14 @@ public class Event {
     }
 
     // Constructor completo
-    public Event(Long id, String name, String description, LocalDateTime eventDate,
+    public Event(Long id, String name, String description, LocalDateTime eventDate, LocalDateTime endDate,
             Long venueId, String venueName, Integer capacity, BigDecimal ticketPrice,
             String status, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.eventDate = eventDate;
+        this.endDate = endDate;
         this.venueId = venueId;
         this.venueName = venueName;
         this.capacity = capacity;
@@ -129,6 +131,14 @@ public class Event {
         this.eventDate = eventDate;
     }
 
+    public LocalDateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
+    }
+
     public Long getVenueId() {
         return venueId;
     }
@@ -208,6 +218,7 @@ public class Event {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", eventDate=" + eventDate +
+                ", endDate=" + endDate +
                 ", status='" + status + '\'' +
                 '}';
     }

@@ -1,6 +1,9 @@
 package com.tiquetera.events.infrastructure.adapter.in.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tiquetera.events.infrastructure.adapter.in.web.validation.DateRange;
+import com.tiquetera.events.infrastructure.adapter.in.web.validation.group.Create;
+import com.tiquetera.events.infrastructure.adapter.in.web.validation.group.Update;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -18,50 +21,60 @@ import java.time.LocalDateTime;
  * Es parte de la infraestructura, no del dominio.
  * 
  * @author Ticketing Team
- * @version 2.0 - Hexagonal Architecture
+ * @version 3.0 - HU5 Error Handling
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "Objeto de transferencia de datos para Eventos")
+@DateRange(startDate = "eventDate", endDate = "endDate", groups = { Create.class, Update.class })
 public class EventDTO {
 
     @Schema(description = "ID único del evento", example = "1")
+    @NotNull(groups = Update.class)
+    @Null(groups = Create.class)
     private Long id;
 
-    @NotBlank(message = "El nombre del evento es obligatorio")
-    @Size(min = 3, max = 200, message = "El nombre debe tener entre 3 y 200 caracteres")
+    @NotBlank(message = "{event.name.notblank}", groups = { Create.class, Update.class })
+    @Size(min = 3, max = 200, message = "{event.name.size}", groups = { Create.class, Update.class })
     @Schema(description = "Nombre del evento", example = "Concierto de Rock 2025", required = true)
     private String name;
 
-    @NotBlank(message = "La descripción es obligatoria")
-    @Size(min = 10, max = 1000, message = "La descripción debe tener entre 10 y 1000 caracteres")
+    @NotBlank(message = "{event.description.notblank}", groups = { Create.class, Update.class })
+    @Size(min = 10, max = 1000, message = "{event.description.size}", groups = { Create.class, Update.class })
     @Schema(description = "Descripción detallada del evento", example = "El mejor concierto de rock del año con bandas internacionales", required = true)
     private String description;
 
-    @NotNull(message = "La fecha del evento es obligatoria")
-    @FutureOrPresent(message = "La fecha del evento no puede ser pasada")
+    @NotNull(message = "{event.date.notnull}", groups = { Create.class, Update.class })
+    @FutureOrPresent(message = "{event.date.future}", groups = { Create.class, Update.class })
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    @Schema(description = "Fecha y hora del evento", example = "2025-12-31T20:00:00", required = true)
+    @Schema(description = "Fecha y hora de inicio del evento", example = "2025-12-31T20:00:00", required = true)
     private LocalDateTime eventDate;
 
-    @NotNull(message = "El ID del venue es obligatorio")
-    @Positive(message = "El ID del venue debe ser un número positivo")
+    @NotNull(message = "{event.date.notnull}", groups = { Create.class, Update.class })
+    @FutureOrPresent(message = "{event.date.future}", groups = { Create.class, Update.class })
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Schema(description = "Fecha y hora de fin del evento", example = "2025-12-31T23:00:00", required = true)
+    private LocalDateTime endDate;
+
+    @NotNull(message = "{event.venue.notnull}", groups = { Create.class, Update.class })
+    @Positive(message = "{event.venue.positive}", groups = { Create.class, Update.class })
     @Schema(description = "ID del venue donde se realizará el evento", example = "1", required = true)
     private Long venueId;
 
     @Schema(description = "Nombre del venue", example = "Estadio Metropolitano")
     private String venueName;
 
-    @NotNull(message = "La capacidad es obligatoria")
-    @Positive(message = "La capacidad debe ser un número positivo")
+    @NotNull(message = "{event.capacity.notnull}", groups = { Create.class, Update.class })
+    @Positive(message = "{event.capacity.positive}", groups = { Create.class, Update.class })
     @Schema(description = "Capacidad total del evento", example = "50000", required = true)
     private Integer capacity;
 
-    @NotNull(message = "El precio es obligatorio")
-    @DecimalMin(value = "0.0", inclusive = false, message = "El precio debe ser mayor que cero")
-    @Digits(integer = 10, fraction = 2, message = "El precio debe tener máximo 10 enteros y 2 decimales")
+    @NotNull(message = "{event.price.notnull}", groups = { Create.class, Update.class })
+    @DecimalMin(value = "0.0", inclusive = false, message = "{event.price.min}", groups = { Create.class,
+            Update.class })
+    @Digits(integer = 10, fraction = 2, message = "{event.price.digits}", groups = { Create.class, Update.class })
     @Schema(description = "Precio del boleto", example = "150000.00", required = true)
     private BigDecimal ticketPrice;
 

@@ -4,6 +4,8 @@ import com.tiquetera.events.domain.model.Event;
 import com.tiquetera.events.domain.ports.in.*;
 import com.tiquetera.events.infrastructure.adapter.in.web.dto.EventDTO;
 import com.tiquetera.events.infrastructure.adapter.in.web.mapper.EventWebMapper;
+import com.tiquetera.events.infrastructure.adapter.in.web.validation.group.Create;
+import com.tiquetera.events.infrastructure.adapter.in.web.validation.group.Update;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -11,11 +13,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +30,7 @@ import java.util.List;
  * Reemplaza el antiguo EventController.
  * 
  * @author Ticketing Team
- * @version 2.0 - Hexagonal Architecture
+ * @version 3.0 - HU5 Error Handling
  */
 @Slf4j
 @RestController
@@ -44,12 +47,14 @@ public class EventRestAdapter {
         private final EventWebMapper mapper;
 
         @PostMapping
-        @Operation(summary = "Crear un nuevo evento", description = "Crea un nuevo evento en el sistema")
+        @PreAuthorize("hasRole('ADMIN')")
+        @Operation(summary = "Crear un nuevo evento", description = "Crea un nuevo evento en el sistema (Solo ADMIN)")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "201", description = "Evento creado exitosamente", content = @Content(schema = @Schema(implementation = EventDTO.class))),
-                        @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos")
+                        @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos"),
+                        @ApiResponse(responseCode = "403", description = "No autorizado")
         })
-        public ResponseEntity<EventDTO> createEvent(@Valid @RequestBody EventDTO eventDTO) {
+        public ResponseEntity<EventDTO> createEvent(@Validated(Create.class) @RequestBody EventDTO eventDTO) {
                 log.info("POST /api/v1/events - Creando evento: {}", eventDTO.getName());
 
                 Event event = mapper.toDomain(eventDTO);
@@ -118,15 +123,17 @@ public class EventRestAdapter {
         }
 
         @PutMapping("/{id}")
-        @Operation(summary = "Actualizar un evento", description = "Actualiza la información de un evento existente")
+        @PreAuthorize("hasRole('ADMIN')")
+        @Operation(summary = "Actualizar un evento", description = "Actualiza la información de un evento existente (Solo ADMIN)")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "200", description = "Evento actualizado exitosamente", content = @Content(schema = @Schema(implementation = EventDTO.class))),
                         @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos"),
-                        @ApiResponse(responseCode = "404", description = "Evento no encontrado")
+                        @ApiResponse(responseCode = "404", description = "Evento no encontrado"),
+                        @ApiResponse(responseCode = "403", description = "No autorizado")
         })
         public ResponseEntity<EventDTO> updateEvent(
                         @Parameter(description = "ID del evento a actualizar", required = true) @PathVariable Long id,
-                        @Valid @RequestBody EventDTO eventDTO) {
+                        @Validated(Update.class) @RequestBody EventDTO eventDTO) {
 
                 log.info("PUT /api/v1/events/{} - Actualizando evento", id);
 
@@ -137,10 +144,12 @@ public class EventRestAdapter {
         }
 
         @DeleteMapping("/{id}")
-        @Operation(summary = "Eliminar un evento", description = "Elimina un evento del sistema")
+        @PreAuthorize("hasRole('ADMIN')")
+        @Operation(summary = "Eliminar un evento", description = "Elimina un evento del sistema (Solo ADMIN)")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "204", description = "Evento eliminado exitosamente"),
-                        @ApiResponse(responseCode = "404", description = "Evento no encontrado")
+                        @ApiResponse(responseCode = "404", description = "Evento no encontrado"),
+                        @ApiResponse(responseCode = "403", description = "No autorizado")
         })
         public ResponseEntity<Void> deleteEvent(
                         @Parameter(description = "ID del evento a eliminar", required = true) @PathVariable Long id) {

@@ -42,6 +42,9 @@ public class EventEntity {
     @Column(name = "event_date", nullable = false)
     private LocalDateTime eventDate;
 
+    @Column(name = "end_date")
+    private LocalDateTime endDate;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "venue_id", nullable = false)
     private VenueEntity venue;

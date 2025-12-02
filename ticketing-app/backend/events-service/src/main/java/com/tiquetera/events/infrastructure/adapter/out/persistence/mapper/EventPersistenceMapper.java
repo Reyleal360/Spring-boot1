@@ -2,6 +2,7 @@ package com.tiquetera.events.infrastructure.adapter.out.persistence.mapper;
 
 import com.tiquetera.events.domain.model.Event;
 import com.tiquetera.events.infrastructure.adapter.out.persistence.entity.EventEntity;
+import com.tiquetera.events.infrastructure.adapter.out.persistence.entity.VenueEntity;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
  * MapStruct generará automáticamente la implementación de este mapper.
  * 
  * @author Ticketing Team
- * @version 2.0 - Hexagonal Architecture
+ * @version 3.0 - HU5 Error Handling
  */
 @Mapper(componentModel = "spring")
 public interface EventPersistenceMapper {
@@ -43,6 +44,7 @@ public interface EventPersistenceMapper {
         builder.name(domain.getName());
         builder.description(domain.getDescription());
         builder.eventDate(domain.getEventDate());
+        builder.endDate(domain.getEndDate());
         builder.capacity(domain.getCapacity());
         builder.ticketPrice(domain.getTicketPrice());
         builder.status(domain.getStatus());

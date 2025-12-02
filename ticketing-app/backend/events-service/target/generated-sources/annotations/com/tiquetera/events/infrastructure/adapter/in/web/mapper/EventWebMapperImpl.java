@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-11-20T19:17:18-0500",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.16 (Ubuntu)"
+    date = "2025-12-01T18:57:22-0500",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.17 (Ubuntu)"
 )
 @Component
 public class EventWebMapperImpl implements EventWebMapper {
@@ -27,6 +27,7 @@ public class EventWebMapperImpl implements EventWebMapper {
         event.setName( dto.getName() );
         event.setDescription( dto.getDescription() );
         event.setEventDate( dto.getEventDate() );
+        event.setEndDate( dto.getEndDate() );
         event.setVenueId( dto.getVenueId() );
         event.setVenueName( dto.getVenueName() );
         event.setCapacity( dto.getCapacity() );
@@ -50,6 +51,7 @@ public class EventWebMapperImpl implements EventWebMapper {
         eventDTO.name( domain.getName() );
         eventDTO.description( domain.getDescription() );
         eventDTO.eventDate( domain.getEventDate() );
+        eventDTO.endDate( domain.getEndDate() );
         eventDTO.venueId( domain.getVenueId() );
         eventDTO.venueName( domain.getVenueName() );
         eventDTO.capacity( domain.getCapacity() );

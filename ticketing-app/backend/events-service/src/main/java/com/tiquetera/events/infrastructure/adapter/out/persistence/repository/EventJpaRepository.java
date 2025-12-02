@@ -34,7 +34,7 @@ public interface EventJpaRepository extends JpaRepository<EventEntity, Long>, Jp
      * @param venueId ID del venue
      * @return lista de eventos
      */
-    @Query("SELECT e FROM EventEntity e WHERE e.venueId = :venueId")
+    @Query("SELECT e FROM EventEntity e WHERE e.venue.id = :venueId")
     List<EventEntity> findByVenueId(@Param("venueId") Long venueId);
 
     /**

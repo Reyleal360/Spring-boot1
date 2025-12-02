@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-11-20T19:21:55-0500",
-    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.44.0.v20251118-1623, environment: Java 21.0.9 (Eclipse Adoptium)"
+    date = "2025-12-01T18:57:22-0500",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.17 (Ubuntu)"
 )
 @Component
 public class EventPersistenceMapperImpl implements EventPersistenceMapper {
@@ -30,6 +30,7 @@ public class EventPersistenceMapperImpl implements EventPersistenceMapper {
         event.setName( entity.getName() );
         event.setDescription( entity.getDescription() );
         event.setEventDate( entity.getEventDate() );
+        event.setEndDate( entity.getEndDate() );
         event.setCapacity( entity.getCapacity() );
         event.setTicketPrice( entity.getTicketPrice() );
         event.setStatus( entity.getStatus() );

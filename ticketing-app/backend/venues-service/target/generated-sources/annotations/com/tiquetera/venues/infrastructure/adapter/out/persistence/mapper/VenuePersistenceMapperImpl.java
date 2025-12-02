@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-11-20T18:51:53-0500",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.16 (Ubuntu)"
+    date = "2025-12-01T18:57:21-0500",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.17 (Ubuntu)"
 )
 @Component
 public class VenuePersistenceMapperImpl implements VenuePersistenceMapper {

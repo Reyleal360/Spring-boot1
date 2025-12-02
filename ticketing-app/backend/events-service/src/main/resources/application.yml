@@ -26,3 +26,10 @@ springdoc:
     path: /api-docs
   swagger-ui:
     path: /swagger-ui.html
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - [TraceId: %X{traceId}] - %msg%n"
+  level:
+    root: INFO
+    com.tiquetera: DEBUG

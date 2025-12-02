@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS venues (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(200) NOT NULL,
+    city VARCHAR(100),
+    capacity INT
+);
