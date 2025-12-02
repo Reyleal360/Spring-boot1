@@ -1,8 +1,8 @@
-# HU5: Gestión Estándar de Errores y Seguridad JWT
+# HU5: Standardized Error Handling and JWT Security
 
-Esta rama implementa un sistema robusto de seguridad basado en JWT (JSON Web Tokens) y un manejo global de excepciones estandarizado utilizando el RFC 7807 (Problem Details).
+This branch implements a robust security system based on JWT (JSON Web Tokens) and standardized global exception handling using RFC 7807 (Problem Details).
 
-## Diagrama de Autenticación
+## Authentication Diagram
 
 ```mermaid
 sequenceDiagram
@@ -26,17 +26,17 @@ sequenceDiagram
     end
 ```
 
-## Implementación Detallada
+## Detailed Implementation
 
-### 1. Seguridad con Spring Security y JWT
-Se ha configurado una arquitectura de seguridad *stateless*.
+### 1. Security with Spring Security and JWT
+A *stateless* security architecture has been configured.
 
-**Componentes Clave**:
-*   `JwtAuthenticationFilter`: Intercepta cada petición para validar el token JWT en el encabezado `Authorization`.
-*   `SecurityConfig`: Define la cadena de filtros y los permisos por ruta (ej. `/admin/**` solo para rol ADMIN).
-*   `JwtService`: Clase utilitaria para crear, firmar y validar tokens usando la librería `jjwt`.
+**Key Components**:
+*   `JwtAuthenticationFilter`: Intercepts every request to validate the JWT token in the `Authorization` header.
+*   `SecurityConfig`: Defines the filter chain and route permissions (e.g., `/admin/**` only for ADMIN role).
+*   `JwtService`: Utility class to create, sign, and validate tokens using the `jjwt` library.
 
-**Configuración de Seguridad (`infrastructure/config/SecurityConfig.java`)**:
+**Security Configuration (`infrastructure/config/SecurityConfig.java`)**:
 ```java
 @Bean
 public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -52,34 +52,34 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
 }
 ```
 
-### 2. Manejo Global de Errores
-Se utiliza `GlobalExceptionHandler` anotado con `@RestControllerAdvice` para capturar excepciones en toda la aplicación y transformarlas en respuestas JSON estructuradas.
+### 2. Global Error Handling
+A `GlobalExceptionHandler` annotated with `@RestControllerAdvice` is used to capture exceptions throughout the application and transform them into structured JSON responses.
 
-**Formato de Respuesta (RFC 7807)**:
+**Response Format (RFC 7807)**:
 ```json
 {
   "type": "about:blank",
   "title": "Bad Request",
   "status": 400,
-  "detail": "El campo 'nombre' no puede estar vacío",
+  "detail": "The field 'name' cannot be empty",
   "instance": "/api/events"
 }
 ```
 
-**Clase `GlobalExceptionHandler` (`infrastructure/exception/GlobalExceptionHandler.java`)**:
+**Class `GlobalExceptionHandler` (`infrastructure/exception/GlobalExceptionHandler.java`)**:
 ```java
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ProblemDetail handleValidationErrors(MethodArgumentNotValidException ex) {
-        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Error de validación");
-        // ... agregar detalles de campos
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Validation Error");
+        // ... add field details
         return problem;
     }
 }
 ```
 
-## Pruebas de Seguridad
-1.  **Registro**: `POST /auth/register`
-2.  **Login**: `POST /auth/login` -> Recibir Token.
-3.  **Acceso Protegido**: Usar el token en el header `Authorization: Bearer <token>`.
+## Security Testing
+1.  **Register**: `POST /auth/register`
+2.  **Login**: `POST /auth/login` -> Receive Token.
+3.  **Protected Access**: Use the token in the header `Authorization: Bearer <token>`.
