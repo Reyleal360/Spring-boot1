@@ -1,8 +1,8 @@
-# HU3: Refactorización a Arquitectura Hexagonal
+# HU3: Hexagonal Architecture Refactor
 
-Esta rama introduce la **Arquitectura Hexagonal (Ports & Adapters)** para desacoplar la lógica de negocio de la infraestructura, mejorando la mantenibilidad y testabilidad del código.
+This branch introduces the **Hexagonal Architecture (Ports & Adapters)** to decouple business logic from infrastructure, improving code maintainability and testability.
 
-## Diagrama de Arquitectura
+## Architecture Diagram
 
 ```mermaid
 graph TD
@@ -27,27 +27,27 @@ graph TD
     JPAAdapter ..|> OutputPort
 ```
 
-## Estructura del Proyecto
+## Project Structure
 
-El código se ha reorganizado en tres capas principales:
+The code has been reorganized into three main layers:
 
 1.  **Domain (`domain`)**:
-    *   Contiene las entidades (`Event`) y las interfaces de los puertos.
-    *   **Input Ports**: Interfaces que definen los casos de uso (ej. `CreateEventUseCase`).
-    *   **Output Ports**: Interfaces que definen el acceso a datos (ej. `EventRepositoryPort`).
+    *   Contains entities (`Event`) and port interfaces.
+    *   **Input Ports**: Interfaces defining use cases (e.g., `CreateEventUseCase`).
+    *   **Output Ports**: Interfaces defining data access (e.g., `EventRepositoryPort`).
 
 2.  **Application (`application`)**:
-    *   Implementa los casos de uso.
-    *   Ejemplo: `CreateEventService` implementa `CreateEventUseCase` y utiliza `EventRepositoryPort`.
+    *   Implements the use cases.
+    *   Example: `CreateEventService` implements `CreateEventUseCase` and uses `EventRepositoryPort`.
 
 3.  **Infrastructure (`infrastructure`)**:
-    *   Implementa los adaptadores.
-    *   **Adapter JPA**: `EventJpaAdapter` implementa `EventRepositoryPort` usando Spring Data JPA.
-    *   **Adapter Web**: `EventController` utiliza `CreateEventUseCase`.
+    *   Implements the adapters.
+    *   **JPA Adapter**: `EventJpaAdapter` implements `EventRepositoryPort` using Spring Data JPA.
+    *   **Web Adapter**: `EventController` uses `CreateEventUseCase`.
 
-## Código Relevante
+## Relevant Code
 
-**Puerto de Salida (`domain/ports/out/EventRepositoryPort.java`)**:
+**Output Port (`domain/ports/out/EventRepositoryPort.java`)**:
 ```java
 public interface EventRepositoryPort {
     Event save(Event event);
@@ -56,7 +56,7 @@ public interface EventRepositoryPort {
 }
 ```
 
-**Adaptador JPA (`infrastructure/adapter/out/jpa/EventJpaAdapter.java`)**:
+**JPA Adapter (`infrastructure/adapter/out/jpa/EventJpaAdapter.java`)**:
 ```java
 @Component
 @RequiredArgsConstructor
@@ -66,13 +66,13 @@ public class EventJpaAdapter implements EventRepositoryPort {
 
     @Override
     public Event save(Event event) {
-        // Mapeo de Dominio a Entidad JPA y guardado
+        // Mapping Domain to JPA Entity and saving
         return mapper.toDomain(eventRepository.save(mapper.toEntity(event)));
     }
 }
 ```
 
-## Beneficios
-*   **Independencia de Frameworks**: El dominio no depende de Spring ni de JPA.
-*   **Testabilidad**: Es fácil probar el dominio usando Mocks para los puertos.
-*   **Flexibilidad**: Se pueden cambiar los adaptadores (ej. cambiar base de datos) sin tocar el dominio.
+## Benefits
+*   **Framework Independence**: The domain does not depend on Spring or JPA.
+*   **Testability**: Easy to test the domain using Mocks for the ports.
+*   **Flexibility**: Adapters can be changed (e.g., switching databases) without touching the domain.
